@@ -32,12 +32,13 @@ class CsvCommande extends Command{
     protected function execute(InputInterface $input, OutputInterface $output){
         
         $lienCsv = $input->getArgument('lien');
-        $open = fopen("$lienCsv", "r");
-        if (fgetcsv($open)){   
+        $file = fopen("$lienCsv", "r");
+        while (!feof($file)){  
+            print_r(fgetcsv($file)); 
         }
         
-        fclose($open);
-        return Command::SUCCESS;
+        fclose($file);
+        //return Command::SUCCESS;
     }
 
 }
