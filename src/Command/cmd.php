@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,8 +13,15 @@ use Symfony\Component\DependencyInjection\Loader\ProtectedPhpFileLoader;
 
 class CsvCommande extends Command{
 
-    private $em;
-    protected static $defaultName='testDnd:affiche';
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct();
+        $this->em = $em;
+    }
+    
+
+   
+    //protected static $defaultName='testDnd:affiche';
 
     protected function configure()
     {
@@ -22,12 +31,6 @@ class CsvCommande extends Command{
             ->addArgument('lien', InputArgument::REQUIRED, 'link');
     }
     
-
-    /*private $csvOptions = array(
-        'finder_in' => 'public',
-        'finder_name' => 'products.csv',
-        
-    );*/
 
     protected function execute(InputInterface $input, OutputInterface $output){
         
