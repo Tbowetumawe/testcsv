@@ -37,18 +37,30 @@ class CsvCommande extends Command{
 
     protected function execute(InputInterface $input, OutputInterface $output){
         
-        $io = new SymfonyStyle($input, $output);
-        $io->title('import');
-        $reader = Reader::createFromPath('%kernel.root_dir%/../public/products.csv');
-        $results = $reader->fetchAssoc();
+        $row = 1;
+        $lienCsv = $input->getArgument('lien');
+        if (($handle = fopen($lienCsv, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $num = count($data);
+                echo "<p> $num champs à la ligne $row: <br /></p>\n";
+                $row++;
+                for ($c=0; $c < $num; $c++) {
+                    echo $data[$c] . "<br />\n";
+                }
+            }
+            fclose($handle);
+        }
+      
+        
         /*$lienCsv = $input->getArgument('lien');
         $file = fopen("$lienCsv", "r");
         while (!feof($file)){  
+        
+
             print_r(fgetcsv($file)); 
         }
+        fclose($file);*/
         
-        fclose($file);
-        //return Command::SUCCESS;*/
     }
 
 }
