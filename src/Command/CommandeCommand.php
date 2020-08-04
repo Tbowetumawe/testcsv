@@ -38,52 +38,39 @@ class CommandeCommand extends Command
 
         //on ouvre l'url passer en paramètre
         $read = fopen($arg1, "r");
+        if ($read !== FALSE) {
+            $csvtmp = array();
+            $csvFinal = array();
 
-        $csvtmp = array();
-        $csvFinal = array();
+            $csvfile = file_get_contents($arg1);
+            //array
+            $ligne = str_getcsv($csvfile,"\n"); 
 
-        $csvfile = file_get_contents($arg1);
-        //array
-        $ligne = str_getcsv($csvfile,"\n"); 
+            foreach ($ligne as $key => $item)
+                
+                {
+                array_push($csvtmp, str_getcsv($item, ";")); 
+                $csvFinal[$csvtmp[$key][0]] = $csvtmp[$key]; 
+                
+                array_slice($csvFinal[$csvtmp[$key][0]],2 );
 
-        foreach ($ligne as $key => $item)
+                
+                $result = json_decode($csvfile,false);
+
+                
+                
+                }        
+
+            print_r($csvtmp);
+            //echo $result;
             
-            {
-            array_push($csvtmp, str_getcsv($item, ";")); 
-            $csvFinal[$csvtmp[$key][0]] = $csvtmp[$key]; 
-            
-            array_slice($csvFinal[$csvtmp[$key][0]],2 );
-
-            
-            $result = json_decode($csvfile,true);
-
-            echo "<table>";
-            foreach($result  as $R=>$D){
-                echo "<tr id='Tr_".$R."'>"; 
-                foreach($D as $key=>$Value){
-                    echo "<td id='Td_".$R."_".$key."'>".$Value."</td>";
-                }
-                echo "</tr>";
-                }
-                echo "</table>";
-
-           // print_r($csvtmp);
-
         }
     
-    fclose($read); 
-           
-         
-        
-          
-      
+        fclose($read); 
 
-       
         $io->success('You have a new command! With '. $row.' rows');
-
-        return 0;
-    }
-
-     
     
+
+     return 0;
+    }
 }
