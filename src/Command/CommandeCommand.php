@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use phpDocumentor\Reflection\Types\False_;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,6 +14,8 @@ class CommandeCommand extends Command
 {
     protected static $defaultName = 'commande';
 
+    
+
     protected function configure()
     {
         $this
@@ -22,8 +25,11 @@ class CommandeCommand extends Command
         ;
     }
 
+
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
         $io = new SymfonyStyle($input, $output);
 
         //on récupèr le lien passer en paramètre
@@ -31,34 +37,46 @@ class CommandeCommand extends Command
         $row = 1;
 
         //on ouvre l'url passer en paramètre
-        if (($handle = fopen($arg1, "r")) !== FALSE) {
+        $read = fopen($arg1, "r");
+
+        $csvtmp = array();
+        $csvFinal = array();
+
+        $csvfile = file_get_contents($arg1);
+        //array
+        $ligne = str_getcsv($csvfile,"\n"); 
+
+        foreach ($ligne as $key => $item)
             
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            {
+            array_push($csvtmp, str_getcsv($item, ";")); 
+            $csvFinal[$csvtmp[$key][0]] = $csvtmp[$key]; 
+            
+            array_slice($csvFinal[$csvtmp[$key][0]],2 );
 
-                $num = count($data);
-               // echo "<p> $num champs à la ligne $row: <br /></p>\n";
-                $row++;
-                
-                for ($c=0; $c < $num; $c++) {
-                    printf( $data[$c]) ;
+            
+            $result = json_decode($csvfile,true);
 
-                    /*foreach($data as $ligne) {
-                        foreach($ligne as $cle => $valeur){
-                            
-                        echo $cle.': '.$valeur;
-                        echo $ligne . '<br />';
-                         }
-                     }*/
-                 
-
+            echo "<table>";
+            foreach($result  as $R=>$D){
+                echo "<tr id='Tr_".$R."'>"; 
+                foreach($D as $key=>$Value){
+                    echo "<td id='Td_".$R."_".$key."'>".$Value."</td>";
                 }
-            }
-                /*recupere les donnée
-                $csv_str = file_get_contents($data);
-                $lines = explode("n", $csv_str);*/     
-            
-        fclose($handle);   
+                echo "</tr>";
+                }
+                echo "</table>";
+
+           // print_r($csvtmp);
+
         }
+    
+    fclose($read); 
+           
+         
+        
+          
+      
 
        
         $io->success('You have a new command! With '. $row.' rows');

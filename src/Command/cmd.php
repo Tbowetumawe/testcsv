@@ -14,6 +14,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\ProtectedPhpFileLoader;
 
+
+//TESTE
 class CsvCommande extends Command{
 
     public function __construct(EntityManagerInterface $em)
@@ -63,4 +65,13 @@ class CsvCommande extends Command{
         
     }
 
+    /*function detect_delimiter($csv_string){
+
+        $delimiters = array(';' => 0,',' => 0,"\t" => 0,"|" => 0);
+
+        foreach ($delimiters as $delimiter => & $count) {
+            $count = substr_count($csv_string,$delimiter);
+        }
+        return array_search(max($delimiters), $delimiters);
+    }*/
 }
