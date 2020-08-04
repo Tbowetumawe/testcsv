@@ -40,8 +40,7 @@ class CommandeCommand extends Command
                 $row++;
                 
                 for ($c=0; $c < $num; $c++) {
-                    
-                    echo $data[$c] ;
+                    printf( $data[$c]) ;
 
                     /*foreach($data as $ligne) {
                         foreach($ligne as $cle => $valeur){
