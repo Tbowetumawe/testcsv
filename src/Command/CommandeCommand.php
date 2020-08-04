@@ -25,31 +25,48 @@ class CommandeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        //on récupèr le lien passer en paramètre
         $arg1 = $input->getArgument('lien');
         $row = 1;
 
+        //on ouvre l'url passer en paramètre
         if (($handle = fopen($arg1, "r")) !== FALSE) {
+            
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
                 $num = count($data);
-                //echo "<p> $num champs à la ligne $row: <br /></p>\n";
+               // echo "<p> $num champs à la ligne $row: <br /></p>\n";
                 $row++;
+                
                 for ($c=0; $c < $num; $c++) {
-                    echo $data[$c] ;//."<br />\n";
+                    
+                    echo $data[$c] ;
+
+                    /*foreach($data as $ligne) {
+                        foreach($ligne as $cle => $valeur){
+                            
+                        echo $cle.': '.$valeur;
+                        echo $ligne . '<br />';
+                         }
+                     }*/
+                 
+
                 }
             }
-            fclose($handle);
+                /*recupere les donnée
+                $csv_str = file_get_contents($data);
+                $lines = explode("n", $csv_str);*/     
+            
+        fclose($handle);   
         }
 
-       /* if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
-        }
-
-        if ($input->getOption('option1')) {
-            // ...
-        }*/
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+       
+        $io->success('You have a new command! With '. $row.' rows');
 
         return 0;
     }
+
+     
+    
 }
